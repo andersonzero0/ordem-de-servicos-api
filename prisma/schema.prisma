@@ -11,8 +11,47 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id       Int     @id @default(autoincrement())
+  email    String  @unique
+  name     String?
   password String
+}
+
+model Order {
+  id                  String  @id @default(uuid())
+  name                String
+  document            String?
+  nickname            String?
+  requester           String
+  address             String?
+  phone               String?
+  email               String?
+  budget              Boolean?
+  model               String?
+  brand               String?
+  plate               String
+  fleet               String?
+  chassis             String?
+  renavam             String?
+  km                  String
+  color               String?
+  age                 String?
+  observation         String?
+  reported            String  
+  problem_verified    String?
+  services_performed  String?
+  nf_service          String?
+  nf_parts            String?
+  invoices            String?
+  description_general String?
+  obs_wheel           String?
+  obs_accessories     String?
+  obs_structure       String?
+  add_observation     String?
+  extra_observation   String?
+  total_price         String?
+  discount            String?
+  payment_method      String?
+  total_payable       String?
+  status              String?
 }
