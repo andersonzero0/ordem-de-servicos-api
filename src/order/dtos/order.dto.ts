@@ -29,7 +29,7 @@ export class OrderDto {
   @IsOptional()
   phone: string;
 
-  @IsEmail()
+  @IsString()
   @IsOptional()
   email: string;
 
