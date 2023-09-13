@@ -33,8 +33,9 @@ export class OrderService {
 
   async getYears() {
 
-    return this.prisma.order.groupBy({
-      by: 'create_at',
-    })
+    return this.prisma.$queryRaw`
+      SELECT DISTINCT YEAR(create_at) as year
+      FROM \`Order\`;
+    `;
   }
 }

@@ -21,7 +21,7 @@ export class OrderController {
     )
   }
 
-  @Get('year')
+  @Get('years')
   async getYears() {
 
     return this.orderService.getYears()
