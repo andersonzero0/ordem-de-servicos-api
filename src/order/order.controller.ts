@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from '@prisma/client';
 import { OrderDto } from './dtos/order.dto';
@@ -17,6 +17,23 @@ export class OrderController {
   @Get()
   async getOrderAll(): Promise<ReturnOrderDto[]> {
     return (await this.orderService.getOrders()).map(
+      (order) => new ReturnOrderDto(order)
+    )
+  }
+
+  @Get('year')
+  async getYears() {
+
+    return this.orderService.getYears()
+    
+  }
+
+  @Get('year/:year')
+  async getOrdersByYear(@Param('year') year: number): Promise<ReturnOrderDto[]> {
+
+    const yearReturn = Number(year)
+    
+    return (await this.orderService.getOrdersByYear(yearReturn)).map(
       (order) => new ReturnOrderDto(order)
     )
   }

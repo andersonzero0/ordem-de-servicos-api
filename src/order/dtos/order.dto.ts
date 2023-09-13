@@ -3,6 +3,10 @@ import { IsString, IsEmail, IsBoolean, IsNotEmpty, IsEmpty, IsOptional } from "c
 export class OrderDto {
   @IsEmpty()
   @IsOptional()
+  create_at: Date
+  
+  @IsEmpty()
+  @IsOptional()
   id: string
   
   @IsString()

@@ -18,7 +18,7 @@ model User {
 }
 
 model Order {
-  id                  String  @id @default(uuid())
+  id                  String   @id @default(uuid())
   name                String
   document            String?
   nickname            String?
@@ -26,7 +26,7 @@ model Order {
   address             String?
   phone               String?
   email               String?
-  budget              Boolean?
+  budget              Boolean
   model               String?
   brand               String?
   plate               String
@@ -37,7 +37,7 @@ model Order {
   color               String?
   age                 String?
   observation         String?
-  reported            String  
+  reported            String
   problem_verified    String?
   services_performed  String?
   nf_service          String?
@@ -54,4 +54,6 @@ model Order {
   payment_method      String?
   total_payable       String?
   status              String?
+  create_at           DateTime @default(now())
+  update_at           DateTime @default(now()) @updatedAt
 }
