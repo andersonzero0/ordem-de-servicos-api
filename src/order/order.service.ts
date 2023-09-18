@@ -47,7 +47,7 @@ export class OrderService {
 
       if(findMes != -1){
 
-        dataMes[findMes].total++
+        dataMes[findMes].totalService++
         dataMes[findMes].valorTotal += Number(data.total_payable)
 
         
@@ -55,7 +55,7 @@ export class OrderService {
 
         dataMes.push({
           name: mounth,
-          total: 1,
+          totalService: 1,
           valorTotal: Number(data.total_payable)
         })
         
