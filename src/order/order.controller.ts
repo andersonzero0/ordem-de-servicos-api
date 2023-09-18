@@ -24,7 +24,17 @@ export class OrderController {
   @Get('years')
   async getYears() {
 
-    return this.orderService.getYears()
+    const years = []
+
+    const yearsR = await this.orderService.getYears()
+
+    yearsR.map((year: any) => {
+
+      years.push(Number(year.year))
+      
+    })
+
+    return years
     
   }
 

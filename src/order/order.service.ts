@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderDto } from './dtos/order.dto';
-import { Order } from '@prisma/client';
+import { Order, Prisma } from '@prisma/client';
 
 @Injectable()
 export class OrderService {
@@ -20,22 +20,33 @@ export class OrderService {
   }
 
   async getOrdersByYear(year: number): Promise<OrderDto[]> {
-
     return this.prisma.order.findMany({
       where: {
         create_at: {
           gte: `${year}-01-01T00:00:00.000Z`,
-          lt: `${year + 1}-01-01T00:00:00.000Z`
-        }
-      }
-    })
+          lt: `${year + 1}-01-01T00:00:00.000Z`,
+        },
+      },
+    });
   }
 
   async getYears() {
-
-    return this.prisma.$queryRaw`
+    try {
+      /*const response = await this.prisma.$queryRaw`
       SELECT DISTINCT YEAR(create_at) as year
-      FROM \`Order\`;
-    `;
+      FROM orders;
+    `;*/
+
+      const response = await this.prisma.$queryRaw(
+        Prisma.sql`SELECT DISTINCT YEAR(create_at) as year
+        FROM orders;`
+      )
+
+      return response
+      
+      return response
+    } catch (error) {
+      return error;
+    }
   }
 }
