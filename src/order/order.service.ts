@@ -29,10 +29,44 @@ export class OrderService {
       },
     });
 
+    const dataMes = []
+
+    response.forEach(data => {
+      const date = data.create_at
+
+      const mounth = date.toLocaleString('default', { month: 'short' })
+
+      // if(!dataMes[mounth]) {
+      //   dataMes[mounth] = {
+      //     valorTotal: 0,
+      //     total: 0
+      //   }
+      // }
+
+      const findMes = dataMes.findIndex((data) => data.name == mounth)
+
+      if(findMes != -1){
+
+        dataMes[findMes].total++
+        dataMes[findMes].valorTotal += Number(data.total_payable)
+
+        
+      } else {
+
+        dataMes.push({
+          name: mounth,
+          total: 1,
+          valorTotal: Number(data.total_payable)
+        })
+        
+      }
+
+    }) 
+
     data.push(
       {
         year: year,
-        data: response
+        dataMes
       }
     )
 
@@ -61,13 +95,5 @@ export class OrderService {
     }));
 
     return data
-
-    // return this.prisma.order.findMany({
-    //   where: {
-    //     create_at: {
-    //       gte: `${year}-01-01T00:00:00.000Z`,
-    //       lt: `${year + 1}-01-01T00:00:00.000Z`,
-    //     },
-    //   }
   }
 }
