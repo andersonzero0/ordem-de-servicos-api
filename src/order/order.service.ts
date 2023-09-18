@@ -19,8 +19,8 @@ export class OrderService {
     return this.prisma.order.findMany();
   }
 
-  async getOrdersByYear(year: number): Promise<OrderDto[]> {
-    return this.prisma.order.findMany({
+  async getDataByYear(year: number, data: Object[]) {
+    const response = await this.prisma.order.findMany({
       where: {
         create_at: {
           gte: `${year}-01-01T00:00:00.000Z`,
@@ -28,25 +28,46 @@ export class OrderService {
         },
       },
     });
+
+    data.push(
+      {
+        year: year,
+        data: response
+      }
+    )
+
+    return data
   }
 
-  async getYears() {
-    try {
-      /*const response = await this.prisma.$queryRaw`
-      SELECT DISTINCT YEAR(create_at) as year
-      FROM orders;
-    `;*/
+  async getOrdersByYear() {
+    let data = [];
+    const years = [];
 
-      const response = await this.prisma.$queryRaw(
-        Prisma.sql`SELECT DISTINCT YEAR(create_at) as year
-        FROM orders;`
-      )
+    const yearsR: Object[] = await this.prisma.$queryRaw(
+      Prisma.sql`SELECT DISTINCT YEAR(create_at) as year
+      FROM orders;`,
+    );
 
-      return response
-      
-      return response
-    } catch (error) {
-      return error;
-    }
+    yearsR.map((year: { year: BigInt }) => {
+      years.push(Number(year.year));
+    });
+
+    await Promise.all(years.map(async (year) => {
+
+      const response = await this.getDataByYear(year, data)
+
+      data = response
+
+    }));
+
+    return data
+
+    // return this.prisma.order.findMany({
+    //   where: {
+    //     create_at: {
+    //       gte: `${year}-01-01T00:00:00.000Z`,
+    //       lt: `${year + 1}-01-01T00:00:00.000Z`,
+    //     },
+    //   }
   }
 }

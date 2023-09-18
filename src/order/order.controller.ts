@@ -24,27 +24,7 @@ export class OrderController {
   @Get('years')
   async getYears() {
 
-    const years = []
-
-    const yearsR = await this.orderService.getYears()
-
-    yearsR.map((year: any) => {
-
-      years.push(Number(year.year))
-      
-    })
-
-    return years
+    return this.orderService.getOrdersByYear()
     
-  }
-
-  @Get('year/:year')
-  async getOrdersByYear(@Param('year') year: number): Promise<ReturnOrderDto[]> {
-
-    const yearReturn = Number(year)
-    
-    return (await this.orderService.getOrdersByYear(yearReturn)).map(
-      (order) => new ReturnOrderDto(order)
-    )
   }
 }
