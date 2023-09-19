@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param } from '@nestjs/common';
+import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param, Put } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from '@prisma/client';
 import { OrderDto } from './dtos/order.dto';
@@ -25,6 +25,20 @@ export class OrderController {
   async getYears() {
 
     return this.orderService.getOrdersByYear()
+    
+  }
+
+  @Get(':id')
+  async getOrderById(@Param('id') id: string) {
+
+    return this.orderService.getOrderById(id);
+    
+  }
+
+  @Put(':id')
+  async updateOrder(@Param('id') id: string, @Body() data: OrderDto) {
+
+    return this.orderService.updateOrder(id, data)
     
   }
 }

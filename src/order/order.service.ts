@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OrderDto } from './dtos/order.dto';
 import { Order, Prisma } from '@prisma/client';
@@ -35,13 +35,6 @@ export class OrderService {
       const date = data.create_at
 
       const mounth = date.toLocaleString('default', { month: 'short' })
-
-      // if(!dataMes[mounth]) {
-      //   dataMes[mounth] = {
-      //     valorTotal: 0,
-      //     total: 0
-      //   }
-      // }
 
       const findMes = dataMes.findIndex((data) => data.name == mounth)
 
@@ -95,5 +88,42 @@ export class OrderService {
     }));
 
     return data
+  }
+
+  async getOrderById(id: string) {
+
+    const response = await this.prisma.order.findFirst({
+      where: {
+        id
+      }
+    })
+
+    if(!response) {
+
+      return false
+      
+    }
+
+    return response
+    
+  }
+
+  async updateOrder(id: string, data: OrderDto) {
+
+    const response = await this.getOrderById(id)
+
+    if(!response) {
+
+      return new NotFoundException()
+      
+    }
+
+    return this.prisma.order.update({
+      where: {
+        id
+      },
+      data: data
+    })
+
   }
 }
