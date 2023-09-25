@@ -67,7 +67,10 @@ export class OrderService {
   }
 
   async getOrdersByYear() {
-    let data = [];
+
+    try {
+
+      let data = [];
     const years = [];
 
     const yearsR: Object[] = await this.prisma.$queryRaw(
@@ -88,6 +91,12 @@ export class OrderService {
     }));
 
     return data
+      
+    } catch(error) {
+
+      console.log(error)
+      
+    }
   }
 
   async getOrderById(id: string) {
