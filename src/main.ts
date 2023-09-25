@@ -16,7 +16,7 @@ async function bootstrap() {
     },
     allowedHeaders:
       'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
-    methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS',
+    methods: 'GET,PUT,UPDATE',
     credentials: true,
   });
   await app.listen(3000);
