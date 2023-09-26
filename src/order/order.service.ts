@@ -74,7 +74,7 @@ export class OrderService {
     const years = [];
 
     const yearsR: Object[] = await this.prisma.$queryRaw(
-      Prisma.sql`SELECT DISTINCT YEAR(create_at) as year
+      Prisma.sql`SELECT DISTINCT EXTRACT(YEAR FROM create_at) AS year
       FROM orders;`,
     );
 
@@ -94,7 +94,7 @@ export class OrderService {
       
     } catch(error) {
 
-      return []
+      return error
       
     }
   }
