@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param, Put } from '@nestjs/common';
+import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param, Put, Delete } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from '@prisma/client';
 import { OrderDto } from './dtos/order.dto';
@@ -39,6 +39,13 @@ export class OrderController {
   async updateOrder(@Param('id') id: string, @Body() data: OrderDto) {
 
     return this.orderService.updateOrder(id, data)
+    
+  }
+
+  @Delete(':id')
+  async deleteOrder(@Param('id') id: string) {
+
+    return this.orderService.deleteOrder(id)
     
   }
 }

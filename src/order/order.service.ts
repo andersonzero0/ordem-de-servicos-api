@@ -40,16 +40,42 @@ export class OrderService {
 
       if(findMes != -1){
 
+        if(data.status == "paidout") {
+
+          dataMes[findMes].valorTotalPago += Number(data.total_payable)
+ 
+        } else {
+
+          dataMes[findMes].valorTotalPendente += Number(data.total_payable)
+          
+        }
+
         dataMes[findMes].totalService++
         dataMes[findMes].valorTotal += Number(data.total_payable)
 
         
       } else {
 
+        let valorPago = 0
+        let valorPendente = 0
+        let valorTotal = 0
+
+        if(data.status == "paidout") {
+
+          valorPago += Number(data.total_payable)
+          
+        } else {
+          valorPendente += Number(data.total_payable)
+        }
+
+        valorTotal += Number(data.total_payable)
+
         dataMes.push({
           name: mounth,
           totalService: 1,
-          valorTotal: Number(data.total_payable)
+          valorTotalPago: valorPago,
+          valorTotalPendente: valorPendente,
+          valorTotal: valorTotal
         })
         
       }
@@ -134,5 +160,23 @@ export class OrderService {
       data: data
     })
 
+  }
+
+  async deleteOrder(id: string) {
+
+    const response = await this.getOrderById(id)
+
+    if(!response) {
+
+      return new NotFoundException()
+      
+    }
+
+    return this.prisma.order.delete({
+      where: {
+        id
+      }
+    })
+    
   }
 }
