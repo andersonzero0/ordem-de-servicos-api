@@ -1,7 +1,6 @@
 import { IsString, IsEmail, IsBoolean, IsNotEmpty, IsEmpty, IsOptional } from "class-validator";
 
 export class OrderDto {
-  @IsEmpty()
   @IsOptional()
   create_at: Date
   
