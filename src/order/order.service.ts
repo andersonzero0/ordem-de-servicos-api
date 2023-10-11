@@ -19,7 +19,7 @@ export class OrderService {
     return this.prisma.order.findMany();
   }
 
-  async getDataByYear(year: number, data: Object[]) {
+  async getDataByYear(year: number, data: {year: number, dataMes: any}[]) {
     const response = await this.prisma.order.findMany({
       where: {
         create_at: {
@@ -88,6 +88,35 @@ export class OrderService {
         dataMes
       }
     )
+
+    var monthNames = {
+      "jan.": 1,
+      "fev.": 2,
+      "mar.": 3,
+      "abr.": 4,
+      "mai.": 5,
+      "jun.": 6,
+      "jul.": 7,
+      "ago.": 8,
+      "set.": 9,
+      "out.": 10,
+      "nov.": 11,
+      "dez.": 12
+    };
+
+    await Promise.all(data.map((dataYear: { year: number, dataMes: [] }, index: number) => {
+
+      dataYear.dataMes.sort(function(a: {name: string}, b: {name: string}) {
+
+        console.log([
+          monthNames[a.name],
+          monthNames[b.name]
+        ])
+        
+        return monthNames[a.name] - monthNames[b.name];
+      })
+      
+    }))
 
     return data
   }
