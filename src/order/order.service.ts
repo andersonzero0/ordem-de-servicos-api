@@ -34,7 +34,7 @@ export class OrderService {
     response.forEach(data => {
       const date = data.create_at
 
-      const mounth = date.toLocaleString('default', { month: 'short' })
+      const mounth = date.toLocaleString('pt-BR', { month: 'short' })
 
       const findMes = dataMes.findIndex((data) => data.name == mounth)
 
@@ -104,7 +104,7 @@ export class OrderService {
       "dez.": 12
     };
 
-    await Promise.all(data.map((dataYear: { year: number, dataMes: [] }, index: number) => {
+    await Promise.all(data.map((dataYear: { year: number, dataMes: [] }) => {
 
       dataYear.dataMes.sort(function(a: {name: string}, b: {name: string}) {
 
