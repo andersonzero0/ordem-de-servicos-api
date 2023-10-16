@@ -13,10 +13,19 @@ export class OrderService {
     });
   }
 
-  async getOrders(): Promise<OrderDto[]> {
-    //name, model, brand, place, id, status
+  async getOrders(page: number): Promise<any> {
 
-    return this.prisma.order.findMany();
+    const pageO = Number(page)
+
+    const response =  await this.prisma.$transaction([
+      this.prisma.order.count(),
+      this.prisma.order.findMany({
+        skip: pageO,
+        take: 10
+      })
+    ])
+
+    return response
   }
 
   async getDataByYear(year: number, data: {year: number, dataMes: any}[]) {
@@ -107,11 +116,6 @@ export class OrderService {
     await Promise.all(data.map((dataYear: { year: number, dataMes: [] }) => {
 
       dataYear.dataMes.sort(function(a: {name: string}, b: {name: string}) {
-
-        console.log([
-          monthNames[a.name],
-          monthNames[b.name]
-        ])
         
         return monthNames[a.name] - monthNames[b.name];
       })
@@ -207,5 +211,13 @@ export class OrderService {
       }
     })
     
+  }
+
+  async findOrdersMany() {
+    try {
+      return this.prisma.order.findMany()
+    } catch (error) {
+      return error
+    }
   }
 }

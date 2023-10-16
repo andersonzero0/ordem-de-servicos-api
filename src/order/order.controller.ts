@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Post, Get, UsePipes, ValidationPipe, Param, Put, Delete, Query } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { Order } from '@prisma/client';
 import { OrderDto } from './dtos/order.dto';
@@ -15,10 +15,23 @@ export class OrderController {
   }
 
   @Get()
-  async getOrderAll(): Promise<ReturnOrderDto[]> {
-    return (await this.orderService.getOrders()).map(
-      (order) => new ReturnOrderDto(order)
+  async getOrderAll(@Query('page') page: number): Promise<any> {
+     //const orders = (await this.orderService.getOrders(page)).map(
+     //  (order) => new ReturnOrderDto(order)
+     //)
+
+    const response = await this.orderService.getOrders(page)
+    //return response[1]
+
+
+    const orders = response[1].map(
+      (order: any) => new ReturnOrderDto(order)
     )
+
+    return {
+      orders: orders,
+      count: response[0]
+    }
   }
 
   @Get('years')
@@ -26,6 +39,14 @@ export class OrderController {
 
     return this.orderService.getOrdersByYear()
     
+  }
+
+  @Get('many')
+  async findOrdersMany(): Promise<ReturnOrderDto[]> {
+
+    return (await this.orderService.findOrdersMany()).map(
+      (order) => new ReturnOrderDto(order)
+    )
   }
 
   @Get(':id')
